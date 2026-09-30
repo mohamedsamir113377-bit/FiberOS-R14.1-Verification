@@ -1,35 +1,33 @@
 # FiberOS R14.1 — Independent Verification Record
 
-**This repository contains NO product source code.** It exists only to let a buyer verify,
-by checksum, that the artifact they received is the exact build that passed the audit below.
+**This repository contains NO product source code.** It exists so a buyer can confirm, by
+checksum, that the file delivered by the store is the exact build that passed the audit below.
 
 ## Verified artifact
-- File: `FiberOS-R14.1-CLEAN-SALES-CORE-2026-09-30-AUDITED.zip`
-- SHA-256: `1ba2cfee4798c713079dd87f02df735ca515f900e327fe61e0f03adf437dcbb1  FiberOS-R14.1-CLEAN-SALES-CORE-2026-09-30-AUDITED.zip`
+- File: `FiberOS-R14.1-CLEAN-SALES-CORE-FINAL.zip`
+- SHA-256: `4a88f59ad7dd859348d84659b934febb1d1212de2c5eb978f333a5f8b1799668`
 
-## How to verify (buyer, 30 seconds)
+## Verify in 30 seconds
 ```
-sha256sum FiberOS-R14.1-CLEAN-SALES-CORE-2026-09-30-AUDITED.zip
+sha256sum FiberOS-R14.1-CLEAN-SALES-CORE-FINAL.zip
 ```
 If the printed hash equals the value above, you hold the audited build. If it differs, do not accept the file.
 
-## Audit evidence (reproduced by the auditor on 2026-09-30 UTC)
-| Check | Command | Result |
-|---|---|---|
-| Unit + contract test suite | `npm test` | 317 tests, **316 passed, 0 failed**, 1 skipped |
-| JavaScript syntax | all `.js` files | **0 syntax failures** |
-| JSON validity | all `.json` files | **0 parse failures** |
-| Package manifest integrity | per-file SHA-256 map | every tracked file re-verified; byte total matched exactly |
-| i18n key parity | 15 target locales | **101/101 keys each**, 0 empty values, 0 literal source copies |
-| Secret scan | tokens/keys/passwords | no live credentials or private keys in shipped source |
-| Placeholder scan | TODO/FIXME/HACK | none in shipped code |
-| Backup/editor junk | `.bak/.orig/~/.tmp/.DS_Store` | none |
+## Reproduced audit results (2026-09-30 UTC)
+| Check | Result |
+|---|---|
+| Full test suite | 317 tests — **316 passed, 0 failed**, 1 skipped |
+| JavaScript syntax (all .js) | **0 failures** |
+| JSON validity (all .json) | **0 failures** |
+| Package manifest (per-file SHA-256) | every tracked file re-verified; byte total matched |
+| i18n key parity (15 locales) | **101/101 keys each**, 0 empty, 0 literal source copies |
+| Secret / private-key scan | none present in shipped source |
+| TODO/FIXME · .bak/.tmp junk | none |
 
 ## Notes
-- Third-party vendored assets (e.g. the OCR engine under `apps/*/public/vendor/`) are bundled
-  under their own upstream licences and are listed in `SBOM.cdx.json`.
-- Tests execute fully offline: the workspace is Node-only with zero external runtime dependencies
-  (optional PostgreSQL/Redis adapters are integration-gated and skipped when absent).
+- The product source code is **not** published here and is not downloadable from this repository.
+- Optional PostgreSQL/Redis adapters are integration-gated and skipped when absent; the suite runs fully offline.
+- Third-party vendored assets remain under their own upstream licences (see `SBOM.cdx.json`).
 
 ## Licence
 Proprietary commercial software. Redistribution, resale, or sublicensing is prohibited without a
