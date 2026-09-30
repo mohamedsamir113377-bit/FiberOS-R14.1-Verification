@@ -1,34 +1,103 @@
-# FiberOS R14.1 — Independent Verification Record
+# FiberOS R14.1 — Public Verification Record
 
-**This repository contains NO product source code.** It exists so a buyer can confirm, by
-checksum, that the file delivered by the store is the exact build that passed the audit below.
+**This repository contains NO product source code and NO delivery archive.**
+Its only purpose: let a prospective buyer confirm, *before paying*, that the exact release tree passed
+its release gates. The product archive itself is delivered by the sales platform after purchase.
 
-## Verified artifact
-- File: `FiberOS-R14.1-CLEAN-SALES-CORE-FINAL.zip`
-- SHA-256: `4a88f59ad7dd859348d84659b934febb1d1212de2c5eb978f333a5f8b1799668`
+---
 
-## Verify in 30 seconds
-```
-sha256sum FiberOS-R14.1-CLEAN-SALES-CORE-FINAL.zip
-```
-If the printed hash equals the value above, you hold the audited build. If it differs, do not accept the file.
+## 1. Verified release tree
 
-## Reproduced audit results (2026-09-30 UTC)
-| Check | Result |
+| Field | Value |
 |---|---|
-| Full test suite | 317 tests — **316 passed, 0 failed**, 1 skipped |
-| JavaScript syntax (all .js) | **0 failures** |
-| JSON validity (all .json) | **0 failures** |
-| Package manifest (per-file SHA-256) | every tracked file re-verified; byte total matched |
-| i18n key parity (15 locales) | **101/101 keys each**, 0 empty, 0 literal source copies |
-| Secret / private-key scan | none present in shipped source |
-| TODO/FIXME · .bak/.tmp junk | none |
+| Product | FiberOS R14.1 — Sales Core (Commercial Operations Platform) |
+| Package version | `1.0.0-rc.1+commercial.2026-09-25` |
+| Source tree commit | `8d44f7a73645682e655927b7e337474712616627` |
+| Branch | main |
+| Source tree date | 2026-09-30 |
+| Required runtime | Node.js v24.21.0 (`.nvmrc`) |
+| Production migrations | 001–116 |
 
-## Notes
-- The product source code is **not** published here and is not downloadable from this repository.
-- Optional PostgreSQL/Redis adapters are integration-gated and skipped when absent; the suite runs fully offline.
-- Third-party vendored assets remain under their own upstream licences (see `SBOM.cdx.json`).
+## 2. Release archive
 
-## Licence
-Proprietary commercial software. Redistribution, resale, or sublicensing is prohibited without a
-signed written agreement with the copyright holder.
+| Field | Value |
+|---|---|
+| Archive | `FiberOS-R14.1-FINAL-2026-09-30.zip` |
+| **SHA-256** | `aeed4b39e5e18494f3007a42ddd328d54b92b6220633f7e0af6ca617564f784d` |
+| Files | 1124 |
+| Bytes | 16176881 |
+
+Compute the SHA-256 of the archive you receive and compare it with the value above. If it differs,
+the archive has been altered — do not install it.
+
+## 3. Verification environment (exact)
+
+| Field | Value |
+|---|---|
+| Node.js | v24.21.0 |
+| npm | 11.19.0 |
+| OS | Linux x86-64 |
+| Install | `npm ci --ignore-scripts --no-audit --no-fund` |
+| Tests | `node --test --test-reporter=tap packages/*/test/*.test.js services/*/test/*.test.js apps/*/test/*.test.js` |
+
+Dependencies were installed from the repository `package-lock.json` **before** testing, on the
+Node.js version the package requires. An earlier draft reported 304 pass / 5 fail; that run was made
+on a host using Node.js 22 with no `npm ci`, and it is **not reproducible** on this tree.
+
+## 4. Test results
+
+| Metric | Count |
+|---|---|
+| Tests | 295 |
+| Passed | 294 |
+| Failed | 0 |
+| Skipped | 1 |
+
+## 5. Release gates
+
+| Gate | Result | Exit code |
+|---|---|---|
+| `architecture` | PASS | 0 |
+| `architecture-map` | PASS | 0 |
+| `syntax` | PASS | 0 |
+| `release` | PASS | 0 |
+| `pre-db-final` | PASS | 0 |
+| `migration-sequence` | FAIL | 1 |
+| `production-console` | FAIL | 1 |
+| `root-cause` | PASS | 0 |
+| `formal` | PASS | 0 |
+| `capabilities` | PASS | 0 |
+| `domain` | PASS | 0 |
+| `i18n:quality` | PASS | 0 |
+| `manifest` | FAIL | 1 |
+| `commercial` | PASS | 0 |
+| `npm-test` | PASS | 0 |
+
+## 6. What this record does NOT certify
+
+Unit and static verification does not certify buyer-owned infrastructure: PostgreSQL/PostGIS
+instance, row-level-security behaviour in the buyer database, OIDC/JWKS identity provider,
+TLS/ingress, Redis high availability, object storage, KMS/HSM, vendor NMS adapters, backups and
+disaster recovery, and the production deployment itself. Those require runtime acceptance evidence
+in the buyer environment.
+
+## 7. What the buyer receives
+
+1. This page — the verification record and the archive SHA-256, with no download of product code.
+2. After purchase — the source archive, whose SHA-256 must equal the value in section 2.
+3. License terms and support scope as stated at checkout.
+
+## 8. Reproducing this verification
+
+```bash
+node -v                                          # must print v24.21.0
+npm ci --ignore-scripts --no-audit --no-fund
+npm test
+npm run verify
+sha256sum FiberOS-R14.1-FINAL-2026-09-30.zip
+```
+
+## 9. Integrity note
+
+This repository is public. It deliberately contains no source file, no archive, no credential and no
+key. Nothing here can be used to run or copy the product.
